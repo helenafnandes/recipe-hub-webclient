@@ -1,5 +1,6 @@
 import ThemeRegistry from "../components/ThemeRegistry";
 import Footer from "../components/Footer";
+import { AuthProvider } from "../contexts/AuthContext";
 
 export const metadata = {
   title: "Next.js",
@@ -12,6 +13,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
+    <AuthProvider>
     <html lang="en">
       <body style={{ margin: 0 }}>
         <ThemeRegistry>
@@ -31,5 +33,6 @@ export default function RootLayout({
         </ThemeRegistry>
       </body>
     </html>
+    </AuthProvider>
   );
 }
