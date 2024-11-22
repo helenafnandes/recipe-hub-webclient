@@ -4,9 +4,11 @@ import React, { useState } from "react";
 import { Box, TextField, Button, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "../../../utils/constants";
+import { useAuth } from "../../../contexts/AuthContext";
 
 const RegisterPage: React.FC = () => {
   const router = useRouter();
+  const { login } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -26,15 +28,25 @@ const RegisterPage: React.FC = () => {
       }
 
       const data = await response.json();
-      localStorage.setItem("token", data.access_token); // Salva o token JWT
-      router.push("/recipes"); // Redireciona para a página de receitas
+      localStorage.setItem("token", data.access_token);
+      login();
+      router.push("/recipes");
     } catch (err: any) {
       setError(err.message);
     }
   };
 
   return (
-    <Box sx={{ padding: "2rem" }}>
+    <Box
+  sx={{
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    minHeight: "80vh",
+    padding: "2rem",
+  }}
+>
+  <Box sx={{ maxWidth: 400, textAlign: "center" }}>
       <Typography variant="h4" gutterBottom>
         Register
       </Typography>
@@ -57,7 +69,17 @@ const RegisterPage: React.FC = () => {
       <Button variant="contained" color="primary" onClick={handleRegister}>
         Register
       </Button>
+      <Button
+        variant="text"
+        color="secondary"
+        onClick={() => router.push("/auth/login")}
+        sx={{ marginTop: "1rem" }}
+      >
+        Already have an account? Login here
+      </Button>
+
     </Box>
+</Box>
   );
 };
 

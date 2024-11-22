@@ -10,7 +10,7 @@ export const withAuth = (Component: React.FC) => {
     useEffect(() => {
       const token = localStorage.getItem("token");
       if (!token) {
-        router.push("/auth/login"); // Redireciona para login se não estiver autenticado
+        router.push("/auth/login"); // redirect to login page if not logged in
       }
     }, [router]);
 
