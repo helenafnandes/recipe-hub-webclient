@@ -1,6 +1,7 @@
 import ThemeRegistry from "../components/ThemeRegistry";
 import Footer from "../components/Footer";
 import { AuthProvider } from "../contexts/AuthContext";
+import HeaderWrapper from "../components/HeaderWrapper";
 
 export const metadata = {
   title: "Next.js",
@@ -14,25 +15,23 @@ export default function RootLayout({
 }) {
   return (
     <AuthProvider>
-    <html lang="en">
-      <body style={{ margin: 0 }}>
-        <ThemeRegistry>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              minHeight: "100vh",
-            }}
-          >
-            {/* Main content */}
-            <main style={{ flex: 1 }}>{children}</main>
-            
-            {/* Footer */}
-            <Footer />
-          </div>
-        </ThemeRegistry>
-      </body>
-    </html>
+      <html lang="en">
+        <body style={{ margin: 0 }}>
+          <ThemeRegistry>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                minHeight: "100vh",
+              }}
+            >
+              <HeaderWrapper />
+              <main style={{ flex: 1 }}>{children}</main>
+              <Footer />
+            </div>
+          </ThemeRegistry>
+        </body>
+      </html>
     </AuthProvider>
   );
 }

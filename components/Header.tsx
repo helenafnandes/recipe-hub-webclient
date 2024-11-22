@@ -32,7 +32,7 @@ const Header: React.FC = () => {
   return (
     <AppBar position="static">
       <Toolbar>
-        {/* Icon and Title */}
+        {/* icon and title */}
         <Box
           sx={{
             display: "flex",
@@ -48,7 +48,7 @@ const Header: React.FC = () => {
           </Typography>
         </Box>
 
-        {/* Categories Menu */}
+        {/* recipe categories menu */}
         <Box>
           <Button color="inherit" onClick={handleCategoriesMenuOpen}>
             Categories
@@ -64,7 +64,7 @@ const Header: React.FC = () => {
           </Menu>
         </Box>
           |
-        {/* Account Menu */}
+        {/* account menu */}
         <Box>
           <Button color="inherit" onClick={handleAccountMenuOpen}>
             <AccountCircleIcon
@@ -78,7 +78,15 @@ const Header: React.FC = () => {
           >
             <MenuItem onClick={handleMenuClose}>Your Recipes</MenuItem>
             <MenuItem onClick={handleMenuClose}>Favorites</MenuItem>
-            <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+            <MenuItem
+              onClick={() => {
+                localStorage.removeItem("token");
+                window.location.href = "/auth/login";
+              }}
+            >
+              Logout
+            </MenuItem>
+
           </Menu>
         </Box>
       </Toolbar>
