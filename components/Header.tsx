@@ -87,6 +87,7 @@ const Header: React.FC<HeaderProps> = ({ onRecipeAdded }) => {
             <MenuItem
               onClick={() => {
                 localStorage.removeItem("accessToken");
+                localStorage.clear();
                 window.location.href = "/auth/login";
               }}
             >

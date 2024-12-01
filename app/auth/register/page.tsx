@@ -14,7 +14,6 @@ const RegisterPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const handleRegister = async () => {
-    setError(null);
     try {
       const response = await fetch(ROUTES.register, {
         method: "POST",
@@ -27,11 +26,24 @@ const RegisterPage: React.FC = () => {
         throw new Error(data.message || "Failed to register");
       }
 
-      const data = await response.json();
-      const accessToken = data.accessToken;
+      // Após o registro bem-sucedido, faça login automaticamente
+      const loginResponse = await fetch(ROUTES.login, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
 
-      login(accessToken);  // Realiza o login automaticamente após o registro
-      router.push("/recipes");  // Redireciona para a página de receitas
+      if (!loginResponse.ok) {
+        const data = await loginResponse.json();
+        throw new Error(data.message || "Failed to login");
+      }
+
+      const loginData = await loginResponse.json();
+      const accessToken = loginData.accessToken;
+      const userId = loginData.userId;
+      login(accessToken);
+      localStorage.setItem("userId", userId); 
+      router.push("/recipes");
     } catch (err: any) {
       setError(err.message);
     }
@@ -41,14 +53,15 @@ const RegisterPage: React.FC = () => {
     <Box
       sx={{
         display: "flex",
-        justifyContent: "center",
         alignItems: "center",
-        minHeight: "80vh",
-        padding: "2rem",
+        justifyContent: "center",
+        flex: 1,
       }}
     >
-      <Box sx={{ maxWidth: 400, textAlign: "center" }}>
-        <Typography variant="h4" gutterBottom>Register</Typography>
+      <Box sx={{ maxWidth: 400, textAlign: "center", padding: "2rem" }}>
+        <Typography variant="h4" gutterBottom>
+          Register
+        </Typography>
         {error && <Typography color="error">{error}</Typography>}
         <TextField
           fullWidth
