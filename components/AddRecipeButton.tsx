@@ -4,7 +4,11 @@ import React, { useState } from "react";
 import { Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions, Typography, Box } from "@mui/material";
 import { ROUTES } from "../utils/constants";
 
-const AddRecipeButton: React.FC = () => {
+interface AddRecipeButtonProps {
+  onRecipeAdded: () => void; // Função de callback para ser chamada quando uma receita for adicionada
+}
+
+const AddRecipeButton: React.FC<AddRecipeButtonProps> = ({ onRecipeAdded }) => {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [ingredients, setIngredients] = useState("");
@@ -17,9 +21,9 @@ const AddRecipeButton: React.FC = () => {
     try {
       const token = localStorage.getItem("accessToken");
       if (!token) throw new Error("Unauthorized");
-  
+
       const ingredientsArray = ingredients.split(",").map((i) => i.trim()).filter((i) => i);
-  
+
       const response = await fetch(ROUTES.recipes, {
         method: "POST",
         headers: {
@@ -33,21 +37,21 @@ const AddRecipeButton: React.FC = () => {
           category,
         }),
       });
-  
+
       if (!response.ok) {
         const data = await response.json();
         throw new Error(data.message.join(", "));
       }
-  
+
       setSuccessMessage("Recipe added successfully!");
       setError(null);
       setOpen(false);
+      onRecipeAdded(); // Chama a função de callback para atualizar a lista de receitas
     } catch (err: any) {
       setError(err.message);
       setSuccessMessage(null);  // limpar a mensagem de sucesso se tiver erro
     }
   };
-  
 
   return (
     <>

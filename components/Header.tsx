@@ -14,7 +14,11 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AddRecipeButton from "../components/AddRecipeButton";
 import { useRouter } from "next/navigation"; // Importar o useRouter
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  onRecipeAdded: () => void; // Função de callback para ser passada para AddRecipeButton
+}
+
+const Header: React.FC<HeaderProps> = ({ onRecipeAdded }) => {
   const [anchorElCategories, setAnchorElCategories] = React.useState<null | HTMLElement>(null);
   const [anchorElAccount, setAnchorElAccount] = React.useState<null | HTMLElement>(null);
   const router = useRouter(); // Inicializar o useRouter
@@ -34,7 +38,7 @@ const Header: React.FC = () => {
 
   const handleYourRecipesClick = () => {
     handleMenuClose();
-    router.push("/recipes/my-recipes");
+    router.push("/recipes/my-recipes"); // Navegar para a página de receitas do usuário
   };
 
   const handleHomeClick = () => {
@@ -63,7 +67,7 @@ const Header: React.FC = () => {
         </Box>
 
         <Box sx={{ marginRight: "1rem" }}>
-          <AddRecipeButton />
+          <AddRecipeButton onRecipeAdded={onRecipeAdded} />
         </Box>
           |
         {/* account menu */}

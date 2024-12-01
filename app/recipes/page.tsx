@@ -1,13 +1,12 @@
 "use client";
 
 import React, { useEffect, useState, useCallback } from "react";
-import { Box, Typography, Grid, Button, Divider } from "@mui/material";
+import { Box, Typography, Grid, Divider } from "@mui/material";
 import { ROUTES } from "../../utils/constants";
 import { withAuth } from "../../middlewares/withAuth";
 import SearchBar from "../../components/SearchBar";
 import RecipeGrid from "../../components/RecipeGrid";
 import LoadMoreButton from "../../components/LoadMoreButton";
-import AddRecipeButton from "../../components/AddRecipeButton";
 import useDebounce from "../../components/hooks/useDebounce";
 
 const RecipesPage: React.FC = () => {
@@ -65,6 +64,10 @@ const RecipesPage: React.FC = () => {
 
   const loadMore = () => {
     setPage((prevPage) => prevPage + 1);
+  };
+
+  const handleRecipeAdded = () => {
+    fetchRecipes(); // Atualiza a lista de receitas quando uma nova receita é adicionada
   };
 
   return (

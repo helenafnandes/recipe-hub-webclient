@@ -26,7 +26,9 @@ export default function RootLayout({
               }}
             >
               <HeaderWrapper />
-              <main style={{ flex: 1 }}>{children}</main>
+              <main style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+                {children}
+              </main>
               <Footer />
             </div>
           </ThemeRegistry>
