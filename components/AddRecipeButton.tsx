@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions, Typography } from "@mui/material";
+import { Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions, Typography, Box } from "@mui/material";
 import { ROUTES } from "../utils/constants";
 
 const AddRecipeButton: React.FC = () => {
@@ -51,9 +51,16 @@ const AddRecipeButton: React.FC = () => {
 
   return (
     <>
-      <Button variant="contained" color="primary" onClick={() => setOpen(true)}>
-        Add Recipe
-      </Button>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        {successMessage && (
+          <Typography sx={{ color: 'white', marginRight: '1rem' }}>
+            {successMessage}
+          </Typography>
+        )}
+        <Button variant="contained" color="primary" onClick={() => setOpen(true)}>
+          Add Recipe
+        </Button>
+      </Box>
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogTitle>Add New Recipe</DialogTitle>
         <DialogContent>
@@ -95,7 +102,6 @@ const AddRecipeButton: React.FC = () => {
           </Button>
         </DialogActions>
       </Dialog>
-      {successMessage && <Typography color="success">{successMessage}</Typography>}
     </>
   );
 };

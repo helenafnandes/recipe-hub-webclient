@@ -51,7 +51,7 @@ const RecipesPage: React.FC = () => {
       }
 
       const data = await response.json();
-      setRecipes(data); // Atualize o estado com os novos dados
+      setRecipes(data); 
     } catch (err: any) {
       setError(err.message);
     } finally {
