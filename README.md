@@ -3,7 +3,7 @@
 Este projeto é a implementação do front-end de um sistema de gestão de receitas de cozinha, com autenticação e sistema de cadastro de usuários. Ele se conecta a uma API RESTful construída com NestJS, permitindo a criação, visualização, edição e exclusão de receitas.
 
 ### Repositório Backend
-- **Backend**: [Catálogo de Receitas - Backend](https://github.com/SEU-REPOSITORIO-BACKEND)
+- **Backend**: [Catálogo de Receitas - Backend](https://github.com/helenafnandes/recipe-hub)
 
 ---
 
