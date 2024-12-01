@@ -1,13 +1,14 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { Box, Typography } from "@mui/material";
+import React, { useEffect, useState, useCallback } from "react";
+import { Box, Typography, Grid, Button, Divider } from "@mui/material";
 import { ROUTES } from "../../utils/constants";
 import { withAuth } from "../../middlewares/withAuth";
 import SearchBar from "../../components/SearchBar";
 import RecipeGrid from "../../components/RecipeGrid";
 import LoadMoreButton from "../../components/LoadMoreButton";
 import AddRecipeButton from "../../components/AddRecipeButton";
+import useDebounce from "../../components/hooks/useDebounce";
 
 const RecipesPage: React.FC = () => {
   const [recipes, setRecipes] = useState<any[]>([]);
@@ -17,70 +18,78 @@ const RecipesPage: React.FC = () => {
   const [category, setCategory] = useState<number | "">(1);
   const [search, setSearch] = useState<string>("");
 
-  useEffect(() => {
-    const fetchRecipes = async () => {
-      console.log("Fetching recipes...");
+  const debouncedSearch = useDebounce(search, 500);
 
-      setLoading(true);
-      setError(null);
-  
-      try {
-        const token = localStorage.getItem("accessToken");
-        if (!token) throw new Error("Unauthorized");
-  
-        const queryParams = new URLSearchParams({
-          page: String(page),
-          category: category !== "" ? String(category) : "",
-          search: search || "",  // Filtro de busca
-        }).toString();
-  
-        const response = await fetch(`${ROUTES.recipes}?${queryParams}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+  const fetchRecipes = useCallback(async () => {
+    console.log("Fetching recipes...");
 
-        if (!response.ok) {
-          if (response.status === 401) {
-            throw new Error("Unauthorized: Invalid token or not provided.");
-          } else {
-            throw new Error("Failed to fetch recipes");
-          }
+    setLoading(true);
+    setError(null);
+
+    try {
+      const token = localStorage.getItem("accessToken");
+      if (!token) throw new Error("Unauthorized");
+
+      const queryParams = new URLSearchParams({
+        page: String(page),
+        category: category !== "" ? String(category) : "",
+        search: debouncedSearch || "", // Filtro de busca
+      }).toString();
+
+      const response = await fetch(`${ROUTES.recipes}?${queryParams}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error("Unauthorized: Invalid token or not provided.");
+        } else {
+          throw new Error("Failed to fetch recipes");
         }
-  
-        const data = await response.json();
-        setRecipes((prev) => (page === 1 ? data : [...prev, ...data]));
-      } catch (err: any) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
       }
-    };
 
-    // A busca acontece apenas quando o valor de search for debounced
+      const data = await response.json();
+      setRecipes(data); // Atualize o estado com os novos dados
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [page, category, debouncedSearch]);
+
+  useEffect(() => {
     fetchRecipes();
-  }, [page, category, search]); // Reagindo ao debounced search
+  }, [page, category, debouncedSearch, fetchRecipes]);
 
   const loadMore = () => {
     setPage((prevPage) => prevPage + 1);
   };
 
   return (
-    <Box sx={{ padding: "2rem" }}>
-      <Typography variant="h4" gutterBottom>
-        Recipes
-      </Typography>
+    <Box sx={{ padding: "3rem" }}>
+      <Box sx={{ padding: "0 20%" }}>
+        <Grid container alignItems="center" spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <Typography variant="h2" gutterBottom align="center">
+              Recipes
+            </Typography>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <SearchBar category={category} search={search} setCategory={setCategory} setSearch={setSearch} />
+          </Grid>
+        </Grid>
+      </Box>
       {error && <Typography color="error">{error}</Typography>}
 
-      <Box sx={{ marginBottom: "2rem" }}>
-        <AddRecipeButton />
-      </Box>
-
-      <SearchBar category={category} search={search} setCategory={setCategory} setSearch={setSearch} />
+      <Divider sx={{ margin: "2rem"}} />
 
       <RecipeGrid recipes={recipes} />
 
-      <LoadMoreButton loading={loading} loadMore={loadMore} />
+      <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
+        <LoadMoreButton loading={loading} loadMore={loadMore} />
+      </Box>
     </Box>
   );
 };
