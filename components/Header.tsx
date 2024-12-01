@@ -12,10 +12,12 @@ import {
 import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AddRecipeButton from "../components/AddRecipeButton";
+import { useRouter } from "next/navigation"; // Importar o useRouter
 
 const Header: React.FC = () => {
   const [anchorElCategories, setAnchorElCategories] = React.useState<null | HTMLElement>(null);
   const [anchorElAccount, setAnchorElAccount] = React.useState<null | HTMLElement>(null);
+  const router = useRouter(); // Inicializar o useRouter
 
   const handleCategoriesMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorElCategories(event.currentTarget);
@@ -28,6 +30,11 @@ const Header: React.FC = () => {
   const handleMenuClose = () => {
     setAnchorElCategories(null);
     setAnchorElAccount(null);
+  };
+
+  const handleYourRecipesClick = () => {
+    handleMenuClose();
+    router.push("/recipes/my-recipes"); // Navegar para a página de receitas do usuário
   };
 
   return (
@@ -65,7 +72,7 @@ const Header: React.FC = () => {
             open={Boolean(anchorElAccount)}
             onClose={handleMenuClose}
           >
-            <MenuItem onClick={handleMenuClose}>Your Recipes</MenuItem>
+            <MenuItem onClick={handleYourRecipesClick}>Your Recipes</MenuItem>
             <MenuItem onClick={handleMenuClose}>Favorites</MenuItem>
             <MenuItem
               onClick={() => {
