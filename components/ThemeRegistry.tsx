@@ -10,7 +10,7 @@ export default function ThemeRegistry({
 }) {
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline /> {/* Reseta estilos padrão */}
+      <CssBaseline /> {/* reseta estilos padrao */}
       {children}
     </ThemeProvider>
   );

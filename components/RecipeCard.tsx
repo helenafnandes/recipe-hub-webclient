@@ -13,7 +13,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ title, description }) => {
       <CardMedia
         component="img"
         height="140"
-        image="/placeholder.png" // Substituir pelo caminho real
+        //="/placeholder.png" // Substituir pelo caminho real
         alt="Recipe"
       />
       <CardContent>

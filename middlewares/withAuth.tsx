@@ -1,18 +1,18 @@
-"use client";
-
-import React, { useEffect } from "react";
+import React from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "../contexts/AuthContext";
 
 export const withAuth = (Component: React.FC) => {
   return (props: any) => {
+    const { isLoggedIn } = useAuth();
     const router = useRouter();
 
-    useEffect(() => {
-      const token = localStorage.getItem("token");
+    React.useEffect(() => {
+      const token = localStorage.getItem("accessToken");
       if (!token) {
-        router.push("/auth/login"); // redirect to login page if not logged in
+        router.push("/auth/login");
       }
-    }, [router]);
+    }, [isLoggedIn, router]);
 
     return <Component {...props} />;
   };

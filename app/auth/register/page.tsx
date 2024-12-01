@@ -28,9 +28,10 @@ const RegisterPage: React.FC = () => {
       }
 
       const data = await response.json();
-      localStorage.setItem("token", data.access_token);
-      login();
-      router.push("/recipes");
+      const accessToken = data.accessToken;
+
+      login(accessToken);  // Realiza o login automaticamente após o registro
+      router.push("/recipes");  // Redireciona para a página de receitas
     } catch (err: any) {
       setError(err.message);
     }
@@ -38,48 +39,45 @@ const RegisterPage: React.FC = () => {
 
   return (
     <Box
-  sx={{
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    minHeight: "80vh",
-    padding: "2rem",
-  }}
->
-  <Box sx={{ maxWidth: 400, textAlign: "center" }}>
-      <Typography variant="h4" gutterBottom>
-        Register
-      </Typography>
-      {error && <Typography color="error">{error}</Typography>}
-      <TextField
-        fullWidth
-        label="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        sx={{ marginBottom: "1rem" }}
-      />
-      <TextField
-        fullWidth
-        label="Password"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        sx={{ marginBottom: "1rem" }}
-      />
-      <Button variant="contained" color="primary" onClick={handleRegister}>
-        Register
-      </Button>
-      <Button
-        variant="text"
-        color="secondary"
-        onClick={() => router.push("/auth/login")}
-        sx={{ marginTop: "1rem" }}
-      >
-        Already have an account? Login here
-      </Button>
-
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "80vh",
+        padding: "2rem",
+      }}
+    >
+      <Box sx={{ maxWidth: 400, textAlign: "center" }}>
+        <Typography variant="h4" gutterBottom>Register</Typography>
+        {error && <Typography color="error">{error}</Typography>}
+        <TextField
+          fullWidth
+          label="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          sx={{ marginBottom: "1rem" }}
+        />
+        <TextField
+          fullWidth
+          label="Password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          sx={{ marginBottom: "1rem" }}
+        />
+        <Button variant="contained" color="primary" onClick={handleRegister}>
+          Register
+        </Button>
+        <Button
+          variant="text"
+          color="secondary"
+          onClick={() => router.push("/auth/login")}
+          sx={{ marginTop: "1rem" }}
+        >
+          Already have an account? Login here
+        </Button>
+      </Box>
     </Box>
-</Box>
   );
 };
 

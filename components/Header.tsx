@@ -80,7 +80,7 @@ const Header: React.FC = () => {
             <MenuItem onClick={handleMenuClose}>Favorites</MenuItem>
             <MenuItem
               onClick={() => {
-                localStorage.removeItem("token");
+                localStorage.removeItem("accessToken");
                 window.location.href = "/auth/login";
               }}
             >

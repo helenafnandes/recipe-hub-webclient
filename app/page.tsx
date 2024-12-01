@@ -9,13 +9,17 @@ const RedirectPage: React.FC = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (isLoggedIn) {
+    const token = localStorage.getItem("accessToken");
+
+    if (token) {
+      console.log("Token válido, redirecionando para /recipes");
       router.push("/recipes");
     } else {
+      console.log("Token ausente ou inválido, redirecionando para /auth/login");
       router.push("/auth/login");
     }
-  }, [isLoggedIn, router]);
-
+  }, [router]); 
+  
   return null;
 };
 
