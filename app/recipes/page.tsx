@@ -7,6 +7,7 @@ import { withAuth } from "../../middlewares/withAuth";
 import SearchBar from "../../components/SearchBar";
 import RecipeGrid from "../../components/RecipeGrid";
 import LoadMoreButton from "../../components/LoadMoreButton";
+import AddRecipeButton from "../../components/AddRecipeButton";
 
 const RecipesPage: React.FC = () => {
   const [recipes, setRecipes] = useState<any[]>([]);
@@ -48,7 +49,7 @@ const RecipesPage: React.FC = () => {
         }
   
         const data = await response.json();
-        setRecipes((prev) => (page === 1 ? data : [...prev, ...data])); // Adiciona novas receitas quando necessário
+        setRecipes((prev) => (page === 1 ? data : [...prev, ...data]));
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -70,6 +71,10 @@ const RecipesPage: React.FC = () => {
         Recipes
       </Typography>
       {error && <Typography color="error">{error}</Typography>}
+
+      <Box sx={{ marginBottom: "2rem" }}>
+        <AddRecipeButton />
+      </Box>
 
       <SearchBar category={category} search={search} setCategory={setCategory} setSearch={setSearch} />
 

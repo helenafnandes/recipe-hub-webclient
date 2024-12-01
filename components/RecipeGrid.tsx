@@ -1,9 +1,17 @@
+"use client";
+
 import React from "react";
 import { Grid, Typography } from "@mui/material";
 import RecipeCard from "./RecipeCard";
 
 interface RecipeGridProps {
-  recipes: any[];
+  recipes: {
+    id: string;
+    name: string;
+    preparationMethod?: string;
+    rating: number;
+    numberOfRatings: number;
+  }[];
 }
 
 const RecipeGrid: React.FC<RecipeGridProps> = ({ recipes }) => {
@@ -16,9 +24,15 @@ const RecipeGrid: React.FC<RecipeGridProps> = ({ recipes }) => {
         </Typography>
       ) : (
         <Grid container spacing={4}>
-          {recipes.map((recipe, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
-              <RecipeCard title={recipe.name} description={recipe.description} />
+          {recipes.map((recipe) => (
+            <Grid item xs={12} sm={6} md={4} key={recipe.id}>
+              <RecipeCard
+                id={recipe.id}
+                title={recipe.name}
+                preparationMethod={recipe.preparationMethod || "No description available"}
+                rating={recipe.rating}
+                numberOfRatings={recipe.numberOfRatings}
+              />
             </Grid>
           ))}
         </Grid>
