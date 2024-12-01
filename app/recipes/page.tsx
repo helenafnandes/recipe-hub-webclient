@@ -1,21 +1,12 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Grid,
-  Button,
-  Typography,
-  CircularProgress,
-  TextField,
-  Select,
-  MenuItem,
-  InputLabel,
-  FormControl,
-} from "@mui/material";
-import RecipeCard from "../../components/RecipeCard";
+import { Box, Typography } from "@mui/material";
 import { ROUTES } from "../../utils/constants";
 import { withAuth } from "../../middlewares/withAuth";
+import SearchBar from "../../components/SearchBar";
+import RecipeGrid from "../../components/RecipeGrid";
+import LoadMoreButton from "../../components/LoadMoreButton";
 
 const RecipesPage: React.FC = () => {
   const [recipes, setRecipes] = useState<any[]>([]);
@@ -27,7 +18,7 @@ const RecipesPage: React.FC = () => {
 
   useEffect(() => {
     const fetchRecipes = async () => {
-      console.log("entrou na pag de receitas");
+      console.log("Fetching recipes...");
 
       setLoading(true);
       setError(null);
@@ -39,7 +30,7 @@ const RecipesPage: React.FC = () => {
         const queryParams = new URLSearchParams({
           page: String(page),
           category: category !== "" ? String(category) : "",
-          search: search || "",
+          search: search || "",  // Filtro de busca
         }).toString();
   
         const response = await fetch(`${ROUTES.recipes}?${queryParams}`, {
@@ -48,10 +39,6 @@ const RecipesPage: React.FC = () => {
           },
         });
 
-        console.log(response);
-
-        console.log(token);
-  
         if (!response.ok) {
           if (response.status === 401) {
             throw new Error("Unauthorized: Invalid token or not provided.");
@@ -61,17 +48,17 @@ const RecipesPage: React.FC = () => {
         }
   
         const data = await response.json();
-        setRecipes((prev) => [...prev, ...data]);
+        setRecipes((prev) => (page === 1 ? data : [...prev, ...data])); // Adiciona novas receitas quando necessário
       } catch (err: any) {
         setError(err.message);
       } finally {
         setLoading(false);
       }
     };
-  
+
+    // A busca acontece apenas quando o valor de search for debounced
     fetchRecipes();
-  }, [page, category, search]);
-  
+  }, [page, category, search]); // Reagindo ao debounced search
 
   const loadMore = () => {
     setPage((prevPage) => prevPage + 1);
@@ -84,50 +71,11 @@ const RecipesPage: React.FC = () => {
       </Typography>
       {error && <Typography color="error">{error}</Typography>}
 
-      <FormControl fullWidth sx={{ marginBottom: "1rem" }}>
-        <InputLabel>Category</InputLabel>
-        <Select
-          value={category}
-          onChange={(e) => setCategory(e.target.value as number | "")}
-          label="Category"
-        >
-          <MenuItem value={1}>Meals</MenuItem>
-          <MenuItem value={2}>Snacks</MenuItem>
-          <MenuItem value={3}>Desserts</MenuItem>
-          <MenuItem value={4}>Drinks</MenuItem>
-          <MenuItem value={5}>Other</MenuItem>
-        </Select>
-      </FormControl>
+      <SearchBar category={category} search={search} setCategory={setCategory} setSearch={setSearch} />
 
-      <TextField
-        label="Search"
-        variant="outlined"
-        fullWidth
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        sx={{ marginBottom: "1rem" }}
-      />
+      <RecipeGrid recipes={recipes} />
 
-      <Grid container spacing={4}>
-        {recipes.map((recipe, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index}>
-            <RecipeCard title={recipe.name} description={recipe.description} />
-          </Grid>
-        ))}
-      </Grid>
-
-      {loading ? (
-        <CircularProgress sx={{ margin: "2rem auto", display: "block" }} />
-      ) : (
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={loadMore}
-          sx={{ marginTop: "2rem" }}
-        >
-          Load More
-        </Button>
-      )}
+      <LoadMoreButton loading={loading} loadMore={loadMore} />
     </Box>
   );
 };
