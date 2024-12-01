@@ -12,9 +12,10 @@ interface RecipeGridProps {
     rating: number;
     numberOfRatings: number;
   }[];
+  onDelete?: (id: string) => void; 
 }
 
-const RecipeGrid: React.FC<RecipeGridProps> = ({ recipes }) => {
+const RecipeGrid: React.FC<RecipeGridProps> = ({ recipes, onDelete }) => {
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
       {recipes.length === 0 ? (
@@ -31,6 +32,7 @@ const RecipeGrid: React.FC<RecipeGridProps> = ({ recipes }) => {
                 preparationMethod={recipe.preparationMethod || "No description available"}
                 rating={recipe.rating}
                 numberOfRatings={recipe.numberOfRatings}
+                onDelete={onDelete} // Passa a função de exclusão
               />
             </Grid>
           ))}

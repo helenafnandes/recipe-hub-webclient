@@ -59,6 +59,28 @@ const MyRecipesPage: React.FC = () => {
     setPage((prevPage) => prevPage + 1);
   };
 
+  const handleDelete = async (id: string) => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      if (!token) throw new Error("Unauthorized");
+
+      const response = await fetch(`${ROUTES.recipeById(id)}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete recipe");
+      }
+
+      setRecipes((prevRecipes) => prevRecipes.filter((recipe) => recipe.id !== id));
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
+
   return (
     <Box sx={{ padding: "3rem" }}>
       <Box sx={{ padding: "0 20%" }}>
@@ -74,7 +96,7 @@ const MyRecipesPage: React.FC = () => {
 
       <Divider sx={{ margin: "2rem" }} />
 
-      <RecipeGrid recipes={recipes} />
+      <RecipeGrid recipes={recipes} onDelete={handleDelete} />
 
       <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
         <LoadMoreButton loading={loading} loadMore={loadMore} />

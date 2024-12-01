@@ -34,7 +34,11 @@ const Header: React.FC = () => {
 
   const handleYourRecipesClick = () => {
     handleMenuClose();
-    router.push("/recipes/my-recipes"); // Navegar para a página de receitas do usuário
+    router.push("/recipes/my-recipes");
+  };
+
+  const handleHomeClick = () => {
+    router.push("/recipes");
   };
 
   return (
@@ -46,7 +50,9 @@ const Header: React.FC = () => {
             display: "flex",
             alignItems: "center",
             flexGrow: 1,
+            cursor: "pointer", 
           }}
+          onClick={handleHomeClick}
         >
           <RestaurantMenuIcon
             sx={{ marginRight: 1, fontSize: 30 }}

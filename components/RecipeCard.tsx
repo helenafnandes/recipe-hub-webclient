@@ -1,8 +1,10 @@
 "use client";
 import React from "react";
 import { useRouter } from "next/navigation";
-import { Card, CardMedia, CardContent, Typography, Button } from "@mui/material";
+import { Card, CardMedia, CardContent, Typography, Button, Box, IconButton } from "@mui/material";
 import { styled } from "@mui/system";
+import { Star, StarBorder } from "@mui/icons-material";
+import { ROUTES } from "../utils/constants";
 
 interface RecipeCardProps {
   id: string;
@@ -10,6 +12,7 @@ interface RecipeCardProps {
   preparationMethod: string;
   rating: number;
   numberOfRatings: number;
+  onDelete?: (id: string) => void; // Adiciona a função de exclusão opcional
 }
 
 const SingleLineTypography = styled(Typography)({
@@ -18,11 +21,17 @@ const SingleLineTypography = styled(Typography)({
   textOverflow: 'ellipsis',
 });
 
-const RecipeCard: React.FC<RecipeCardProps> = ({ id, title, preparationMethod, rating, numberOfRatings }) => {
+const RecipeCard: React.FC<RecipeCardProps> = ({ id, title, preparationMethod, rating, numberOfRatings, onDelete }) => {
   const router = useRouter();
 
   const handleLearnMore = () => {
     router.push(`/recipes/${id}`);
+  };
+
+  const handleDelete = async () => {
+    if (onDelete) {
+      onDelete(id);
+    }
   };
 
   return (
@@ -40,13 +49,25 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ id, title, preparationMethod, r
         <SingleLineTypography variant="body2" color="text.secondary">
           {preparationMethod}
         </SingleLineTypography>
-        <Typography variant="body2" color="text.secondary">
-          Rating: {rating} ({numberOfRatings} avaliações)
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          {[...Array(5)].map((_, index) => (
+            index < rating ? <Star key={index} color="primary" /> : <StarBorder key={index} color="primary" />
+          ))}
+          <Typography variant="body2" color="text.secondary" sx={{ marginLeft: 1 }}>
+            ({numberOfRatings} avaliações)
+          </Typography>
+        </Box>
       </CardContent>
-      <Button size="small" color="primary" onClick={handleLearnMore}>
-        Learn More
-      </Button>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: 1 }}>
+        <Button size="small" color="primary" onClick={handleLearnMore}>
+          Learn More
+        </Button>
+        {onDelete && (
+          <IconButton size="small" color="secondary" onClick={handleDelete}>
+            Delete
+          </IconButton>
+        )}
+      </Box>
     </Card>
   );
 };
