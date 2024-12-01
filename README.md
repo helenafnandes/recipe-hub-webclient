@@ -1,36 +1,95 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Catálogo de Receitas - Frontend
 
-## Getting Started
+Este projeto é a implementação do front-end de um sistema de gestão de receitas de cozinha, com autenticação e sistema de cadastro de usuários. Ele se conecta a uma API RESTful construída com NestJS, permitindo a criação, visualização, edição e exclusão de receitas.
 
-First, run the development server:
+### Repositório Backend
+- **Backend**: [Catálogo de Receitas - Backend](https://github.com/SEU-REPOSITORIO-BACKEND)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## Tecnologias Utilizadas
+
+- **Framework**: Next.js
+- **Design System**: Material UI
+- **Design**: Baseado no projeto "Kitchen Tales - A Recipe Sharing Website" de Pearl Pereira ([Figma](https://www.figma.com/community/file/1333514044260264226/kitchen-tales-a-recipe-sharing-website))
+- **Autenticação**: JWT (JSON Web Tokens)
+- **Gerenciamento de Estado**: Context API (para controle de autenticação)
+- **Validação de Dados**: Formulários com validação de campos feita no backend
+- **Pesquisa**: Pesquisa de receitas por palavra-chave com debounce para melhorar a performance
+- **Mensagens de Erro**: Exibição de mensagens de erro provenientes do backend quando necessário
+
+## Diferenciais Implementados
+
+- **Autenticação Contextual**: Renderização condicional de componentes, dependendo do estado de autenticação do usuário (usando Context API).
+- **Exibição de Mensagens de Erro**: Mensagens claras e concisas que informam o usuário sobre erros provenientes do backend.
+- **Pesquisa Avançada**: Implementação de pesquisa por palavra-chave com debounce para otimização da performance da aplicação.
+
+
+---
+
+## Design Pattern
+
+A aplicação segue uma **arquitetura modular**, com separação clara de responsabilidades entre:
+- **Páginas**: Cada página é responsável por uma funcionalidade específica do sistema.
+- **Componentes**: Reutilizáveis, sendo responsáveis por partes específicas da UI, como formulários, listas de receitas, etc.
+- **Contextos**: Usados para gerenciar o estado global da aplicação, como o estado de autenticação do usuário.
+
+---
+
+## Estrutura do Projeto
+
+```
+recipe-hub-webapp
+├── app
+│   ├── auth
+│   │   ├── login
+│   │   │   └── page.tsx
+│   │   └── register
+│   │       └── page.tsx
+│   ├── recipes
+│   │   ├── [id]
+│   │   │   └── page.tsx
+│   │   ├── my-recipes
+│   │   │   └── page.tsx
+│   ├── layout.tsx
+│   └── page.tsx
+├── components
+│   ├── (componentes e hooks)
+├── contexts
+├── middlewares
+├── styles
+└── utils
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Funcionalidades
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### **Autenticação de Usuário**
+- **Tela de Registro de Usuário**: Permite que novos usuários se registrem no sistema.
+- **Tela de Login**: Permite que usuários existentes se autentiquem usando JWT.
 
-## Learn More
+### **Gestão de Receitas**
+- **Tela de Listagem de Receitas**: Exibe todas as receitas, com filtros por categoria e pesquisa por palavras-chave.
+- **Tela de Minhas Receitas**: Exibe as receitas criadas pelo usuário logado, com a opção de deletá-las.
+- **Tela de Adição de Receita**: Permite ao usuário adicionar novas receitas, com campos para nome, ingredientes, modo de preparo e categoria.
+- **Tela de Detalhes da Receita**: Exibe as informações detalhadas de uma receita específica.
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Imagens de algumas telas
 
-## Deploy on Vercel
+(não incluem todas as funcionalidades, como mensagens de sucesso e erro)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Tela de Adicionar Receita**  
+![Adicionar Receita](images/add_recipe.png)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Tela de Login**  
+![Login](images/login.jpeg)
+
+**Minhas Receitas**  
+![Minhas Receitas](images/my_recipes.jpeg)
+
+**Listagem de Receitas**  
+![Listagem de Receitas](images/recipes.jpeg)

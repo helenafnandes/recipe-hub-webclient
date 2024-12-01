@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions, Typography, Box } from "@mui/material";
+import { Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions, Typography, Box, Select, MenuItem } from "@mui/material";
 import { ROUTES } from "../utils/constants";
 
 interface AddRecipeButtonProps {
@@ -73,30 +73,35 @@ const AddRecipeButton: React.FC<AddRecipeButtonProps> = ({ onRecipeAdded }) => {
             fullWidth
             value={name}
             onChange={(e) => setName(e.target.value)}
-            margin="normal"
+            margin="dense"
           />
           <TextField
             label="Ingredients (separated by commas)"
             fullWidth
             value={ingredients}
             onChange={(e) => setIngredients(e.target.value)}
-            margin="normal"
+            margin="dense"
           />
           <TextField
             label="Preparation Method"
             fullWidth
             value={preparationMethod}
             onChange={(e) => setPreparationMethod(e.target.value)}
-            margin="normal"
+            margin="dense"
           />
-          <TextField
+          <Select
             label="Category"
-            type="number"
             fullWidth
             value={category}
             onChange={(e) => setCategory(Number(e.target.value))}
-            margin="normal"
-          />
+            margin="dense"
+          >
+            <MenuItem value={0}>Outros</MenuItem>
+            <MenuItem value={1}>Meals</MenuItem>
+            <MenuItem value={2}>Snacks</MenuItem>
+            <MenuItem value={3}>Desserts</MenuItem>
+            <MenuItem value={4}>Drinks</MenuItem>
+          </Select>
           {error && <Typography color="error">{error}</Typography>}
         </DialogContent>
         <DialogActions>
