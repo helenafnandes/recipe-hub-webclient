@@ -17,7 +17,9 @@ const AddRecipeButton: React.FC = () => {
     try {
       const token = localStorage.getItem("accessToken");
       if (!token) throw new Error("Unauthorized");
-
+  
+      const ingredientsArray = ingredients.split(",").map((i) => i.trim()).filter((i) => i);
+  
       const response = await fetch(ROUTES.recipes, {
         method: "POST",
         headers: {
@@ -26,25 +28,26 @@ const AddRecipeButton: React.FC = () => {
         },
         body: JSON.stringify({
           name,
-          ingredients: ingredients.split(",").map((i) => i.trim()),
+          ingredients: ingredientsArray,
           preparationMethod,
           category,
         }),
       });
-
+  
       if (!response.ok) {
         const data = await response.json();
         throw new Error(data.message.join(", "));
       }
-
+  
       setSuccessMessage("Recipe added successfully!");
       setError(null);
       setOpen(false);
     } catch (err: any) {
       setError(err.message);
-      setSuccessMessage(null);  // Clear success message if there's an error
+      setSuccessMessage(null);  // limpar a mensagem de sucesso se tiver erro
     }
   };
+  
 
   return (
     <>
