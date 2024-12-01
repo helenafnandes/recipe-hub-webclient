@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AddRecipeButton from "../components/AddRecipeButton";
 
 const Header: React.FC = () => {
   const [anchorElCategories, setAnchorElCategories] = React.useState<null | HTMLElement>(null);
@@ -48,20 +49,8 @@ const Header: React.FC = () => {
           </Typography>
         </Box>
 
-        {/* recipe categories menu */}
-        <Box>
-          <Button color="inherit" onClick={handleCategoriesMenuOpen}>
-            Categories
-          </Button>
-          <Menu
-            anchorEl={anchorElCategories}
-            open={Boolean(anchorElCategories)}
-            onClose={handleMenuClose}
-          >
-            <MenuItem onClick={handleMenuClose}>Category 1</MenuItem>
-            <MenuItem onClick={handleMenuClose}>Category 2</MenuItem>
-            <MenuItem onClick={handleMenuClose}>Category 3</MenuItem>
-          </Menu>
+        <Box sx={{ marginRight: "1rem" }}>
+          <AddRecipeButton />
         </Box>
           |
         {/* account menu */}

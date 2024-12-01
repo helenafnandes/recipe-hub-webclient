@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Grid, Typography } from "@mui/material";
+import { Grid, Typography, Box } from "@mui/material";
 import RecipeCard from "./RecipeCard";
 
 interface RecipeGridProps {
@@ -16,14 +16,13 @@ interface RecipeGridProps {
 
 const RecipeGrid: React.FC<RecipeGridProps> = ({ recipes }) => {
   return (
-    <div>
-      {/* Verifica se o array de receitas está vazio */}
+    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
       {recipes.length === 0 ? (
         <Typography variant="h6" color="textSecondary" align="center">
           No recipes found matching your search criteria.
         </Typography>
       ) : (
-        <Grid container spacing={4}>
+        <Grid container spacing={4} justifyContent="center" maxWidth="lg">
           {recipes.map((recipe) => (
             <Grid item xs={12} sm={6} md={4} key={recipe.id}>
               <RecipeCard
@@ -37,7 +36,7 @@ const RecipeGrid: React.FC<RecipeGridProps> = ({ recipes }) => {
           ))}
         </Grid>
       )}
-    </div>
+    </Box>
   );
 };
 
